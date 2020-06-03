@@ -3,6 +3,7 @@ import Layout from './components/hoc/Layout/Layout'
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
 function App() {
+  
   return (
     <div className="App">
       <Layout>
