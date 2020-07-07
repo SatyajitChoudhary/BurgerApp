@@ -4,6 +4,10 @@ import classes from './ContactData.module.css';
 import instance from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/input/input';
+import { connect } from 'react-redux'
+import withErrorHandler from '../../../components/hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../../store/actions';
+
 
 class ContactData extends Component {
     state = {
@@ -89,8 +93,7 @@ class ContactData extends Component {
                 valid: true
             }
         },
-        formIsValid: false,
-        loading: false
+        formIsValid: false
     };
 
     checkValidity = (value,rules) => {
@@ -121,19 +124,12 @@ class ContactData extends Component {
         }
 
         const order = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ings,
             price: this.props.price,    
             orderData: formData
         };
         
-       instance.post('/orders.json', order)
-       .then( response => {
-           this.setState({ loading: false });
-           this.props.history.push('/');
-        })
-       .catch(error => {
-           console.log(error.message);
-           this.setState({ loading: false })});
+       this.props.onOrderBurger(order);
     }
 
     inputChangeHandler= (event, inputIdentifier) => {
@@ -185,7 +181,7 @@ class ContactData extends Component {
         </form>
         );
 
-        if(this.state.loading) {
+        if(this.props.loading) {
             form = <Spinner />;
         }
     
@@ -198,4 +194,19 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+
+const mapStateToProps = state => {
+    return {
+        ings: state.burgerBuilder.ingredients,
+        price: state.burgerBuilder.totalPrice,
+        loading: state.order.loading
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderBurger : (order) => dispatch(actions.purchaseBurger(order))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData,instance));
