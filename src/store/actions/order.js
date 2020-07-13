@@ -5,14 +5,14 @@ export const purchaseBurgerSuccess = (id, orderData) => {
     return {
         type: actionTypes.PURCHASE_BURGER_SUCCESS,
         orderId: id,
-        orderData
+        orderData: orderData
     }
 }
 
 export const purchaseBurgerFail = (error) => {
     return {
         type: actionTypes.PURCHASE_BURGER_FAILED,
-        error
+        error: error
     }
 }
 
@@ -22,10 +22,10 @@ export const purchaseBurgerStart = () => {
     }
 }
 
-export const purchaseBurger = (orderData) => {
+export const purchaseBurger = (orderData,token) => {
     return dispatch => {
         dispatch(purchaseBurgerStart());
-        instance.post('/orders.json', orderData)
+        instance.post('/orders.json?auth='+token, orderData)
        .then( response => {
             // this.props.history.push('/');
             //console.log(response.data);
@@ -46,14 +46,14 @@ export const purchaseInit = () => {
 export const fetchOrderSuccess = (orders) => {
     return {
         type: actionTypes.FETCH_ORDERS_SUCCESS,
-        orders
+        orders: orders
     }
 }
 
 export const fetchOrderFail = (error) => {
     return {
         type: actionTypes.FETCH_ORDERS_FAIL,
-        error
+        error: error
     }
 }
 
@@ -63,11 +63,11 @@ export const fetchOrderStart = () => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchOrders = (token,userId) => {
     return dispatch => {
         dispatch(fetchOrderStart());
-
-       instance.get('./orders.json')
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
+       instance.get('./orders.json'+queryParams)
         .then(res => {
             const fetchedOrders = [];
             for(let key in res.data){
