@@ -27,8 +27,6 @@ export const purchaseBurger = (orderData,token) => {
         dispatch(purchaseBurgerStart());
         instance.post('/orders.json?auth='+token, orderData)
        .then( response => {
-            // this.props.history.push('/');
-            //console.log(response.data);
             dispatch(purchaseBurgerSuccess(response.data.name , orderData))
         })
        .catch( error => {
