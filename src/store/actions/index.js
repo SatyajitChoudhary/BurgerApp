@@ -1,7 +1,9 @@
 export {
     addIngredient,
     removeIngredient,
-    initIngredient
+    initIngredient,
+    setIngredients,
+    fetchIngredientFailed
 } from './burgerBuilder';
 
 export {
@@ -14,5 +16,10 @@ export {
     auth,
     setAuthRedirectPath,
     authCheckState,
-    logout
+    logout,
+    logoutSucceed,
+    authStart,
+    authSuccess,
+    authFail,
+    checkAuthTimeout
 } from './auth';
